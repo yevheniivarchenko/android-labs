@@ -9,21 +9,15 @@ import android.widget.TextView
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var radioGroup: RadioGroup
-    private lateinit var enterTextTextView: TextView
-    private lateinit var outputTextTextView: TextView
-    private lateinit var okButton: Button
-    private lateinit var cancelButton: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        radioGroup = findViewById(R.id.radioGroup)
-        enterTextTextView = findViewById(R.id.enterTextEditText)
-        outputTextTextView = findViewById(R.id.outputTextTextView)
-        okButton = findViewById(R.id.okButton)
-        cancelButton = findViewById(R.id.cancelButton)
+        val radioGroup: RadioGroup = findViewById(R.id.radioGroup)
+        val enterTextTextView: TextView = findViewById(R.id.enterTextEditText)
+        val outputTextTextView: TextView = findViewById(R.id.outputTextTextView)
+        val okButton: Button = findViewById(R.id.okButton)
+        val cancelButton: Button = findViewById(R.id.cancelButton)
 
         var typeface: Typeface? = null
 
@@ -37,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         okButton.setOnClickListener {
-            if (enterTextTextView.text.toString() == "") {
+            if (enterTextTextView.text.toString().isEmpty()) {
                 val toast = Toast.makeText(applicationContext, "Empty string", Toast.LENGTH_SHORT)
                 toast.show()
             } else {
