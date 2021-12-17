@@ -63,9 +63,8 @@ class InputFragment : Fragment() {
                 val enteredText: String = "${enterTextTextView.text}"
                 enteredTextListener.enteredText(enteredText, typeface)
 
-                val fileOutputStream: FileOutputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE)
-
                 try {
+                    val fileOutputStream: FileOutputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE)
                     fileOutputStream.write(enteredText.toByteArray())
                     fileOutputStream.close()
 
@@ -73,8 +72,6 @@ class InputFragment : Fragment() {
                     toast.show()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                } finally {
-                    fileOutputStream.close()
                 }
             }
         }
@@ -88,18 +85,20 @@ class InputFragment : Fragment() {
 
             try {
                 fileInputStream = requireActivity().openFileInput(fileName)
+
                 val byteArray: ByteArray = ByteArray(fileInputStream.available())
+
                 fileInputStream.read(byteArray)
+                fileInputStream?.close()
+
                 val textData: String = String(byteArray)
 
                 val intent: Intent = Intent(requireActivity(), DataActivity::class.java)
                 intent.putExtra("textData", textData)
                 startActivity(intent)
             } catch (e: FileNotFoundException) {
-                val toast = Toast.makeText(requireActivity().application, "File does not exist", Toast.LENGTH_SHORT)
+                val toast = Toast.makeText(requireActivity().application, "File not found", Toast.LENGTH_SHORT)
                 toast.show()
-            } finally {
-                fileInputStream?.close()
             }
         }
 
