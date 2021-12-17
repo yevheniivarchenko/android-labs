@@ -13,12 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 class InputFragment : Fragment() {
     private lateinit var enteredTextListener: EnteredTextListener
-    private lateinit var fileOutputStream: FileOutputStream
-    private lateinit var fileInputStream: FileInputStream
 
     private val fileName: String = "textData.txt"
 
@@ -64,7 +63,7 @@ class InputFragment : Fragment() {
                 val enteredText: String = "${enterTextTextView.text}"
                 enteredTextListener.enteredText(enteredText, typeface)
 
-                fileOutputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE)
+                val fileOutputStream: FileOutputStream = requireActivity().openFileOutput(fileName, Context.MODE_PRIVATE)
 
                 try {
                     fileOutputStream.write(enteredText.toByteArray())
@@ -85,6 +84,8 @@ class InputFragment : Fragment() {
         }
 
         openButton.setOnClickListener {
+            var fileInputStream: FileInputStream? = null
+
             try {
                 fileInputStream = requireActivity().openFileInput(fileName)
                 val byteArray: ByteArray = ByteArray(fileInputStream.available())
@@ -94,10 +95,11 @@ class InputFragment : Fragment() {
                 val intent: Intent = Intent(requireActivity(), DataActivity::class.java)
                 intent.putExtra("textData", textData)
                 startActivity(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (e: FileNotFoundException) {
+                val toast = Toast.makeText(requireActivity().application, "File does not exist", Toast.LENGTH_SHORT)
+                toast.show()
             } finally {
-                fileInputStream.close()
+                fileInputStream?.close()
             }
         }
 
